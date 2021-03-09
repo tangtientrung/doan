@@ -1,0 +1,202 @@
+<div class="category-tab shop-details-tab">
+    <!--category-tab-->
+    <div class="col-sm-12">
+        <ul class="nav nav-tabs">
+
+            <li class="active"><a href="#comment" data-toggle="tab">Comment</a></li>
+            <li><a href="#review" data-toggle="tab">Review sản phẩm</a></li>
+
+
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade active in" id="comment">
+
+
+            @if(session('customer_id'))
+            <div class="row bootstrap snippets bootdeys">
+                <div class="col-sm-12">
+                    <div class="comment-wrapper">
+                        <div class="panel panel-info">
+
+                            <div class="panel-body">
+
+                                <!-- loadcomment thuong -->
+                                <!-- <form action="/binh-luan" method="post">
+                                @csrf
+                                <textarea class="form-control comment" placeholder="bình luận..." name="comment" rows="3"></textarea>
+                                <br>
+                                <input type="hidden" value="{{$product->id}}" name="product_id"/>
+                                <input type="submit" name="" class="btn btn-info pull-right"
+                                value="Đăng"/>
+                                </form> -->
+
+                                <!--ajax -->
+                                <form>
+                                    @csrf
+                                    <textarea class="form-control comment" name="comment" placeholder="bình luận..."
+                                        rows="3"></textarea>
+                                    <br>
+                                    <input type="hidden" value="{{$product->id}}" name="id_product"
+                                        class="id_product" />
+                                    <button type="button" class="btn btn-info pull-right post-comment">Đăng</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            @endif
+            <div id="loadComment"></div>
+
+            <!-- loadcomment thuong -->
+            <!-- @foreach($comment as $cm)
+            <div class="media">
+
+                <a class="pull-left" href="#">
+                    @if($cm->customer->customer_avatar!="")
+                    <img class="img-circle img-sm" src="img/avatar/{{$cm->customer->customer_avatar}}" width="30px" height="30px" alt=""/>
+                    @else
+                    <img class="img-circle img-sm" src="img/avatar/user.jpg" width="30px" height="30px" alt=""/>
+                    @endif
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">{{$cm->customer->customer_name}}
+                        <small><i class="fas fa-clock">{{$cm->created_at}}</i></small>
+                    
+                    </h4>
+                    {{$cm->comment}}
+                </div>
+            </div>
+            @endforeach -->
+
+
+
+
+
+
+
+
+            <div class="col-sm-12">
+                <div class="col-sm-5"></div>
+                <div class="col-sm-3">
+                    @if ($comment->lastPage() > 1)
+                    <ul class="pagination">
+                        <li class="{{ ($comment->currentPage() == 1) ? ' disabled' : '' }}">
+                            <a href="{{ $comment->url(1) }}">Trước</a>
+                        </li>
+                        @for ($i = 1; $i <= $comment->lastPage(); $i++)
+                            <li class="{{ ($comment->currentPage() == $i) ? ' active' : '' }}">
+                                <a href="{{ $comment->url($i) }}">{{ $i }}</a>
+                            </li>
+                            @endfor
+                            <li class="{{ ($comment->currentPage() == $comment->lastPage()) ? ' disabled' : '' }}">
+                                <a href="{{ $comment->url($comment->currentPage()+1) }}">Sau</a>
+                            </li>
+                    </ul>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="tab-pane fade" id="review">
+            {!!$product->product_content!!}
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="recommended_items">
+    <!--recommended_items-->
+    <h2 class="title text-center">recommended items</h2>
+
+    <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="item active">
+                @foreach($related_product as $rp)
+                <div class="col-sm-4">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                <a href="san-pham/chi-tiet/{{$rp->slug_product}}">
+                                    <img src="img/product/{{$rp->product_image}}" alt="" />
+                                    <h2>{{number_format($rp->product_price).' VNĐ'}}</h2>
+                                    <p>{{$rp->product_name}}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="item">
+                @foreach($related_product as $rp)
+                <div class="col-sm-4">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                <a href="san-pham/chi-tiet/{{$rp->slug_product}}">
+                                    <img src="img/product/{{$rp->product_image}}" alt="" />
+                                    <h2>{{number_format($rp->product_price).' VNĐ'}}</h2>
+                                    <p>{{$rp->product_name}}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+            </div>
+
+        </div>
+        <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>
+<!--/recommended_items-->
+
+
+@if(count($thumbnail)>2)
+							<div id="similar-product" class="carousel slide" data-ride="carousel">
+								
+								  <!-- Wrapper for slides -->
+								    <div class="carousel-inner">
+										<div class="item active">
+
+										  <img width="80px" src="img/thumbnail/{{$product->product_image}}" alt="">
+										  @foreach($thumbnail as $t)
+										  <img width="80px" src="img/thumbnail/{{$t->link}}" alt="">
+										  @endforeach
+										</div>
+										<div class="item">
+										  @foreach($thumbnail as $t)
+										  <a href=""><img width="100px" src="img/thumbnail/{{$t->link}}" alt=""></a>
+										  @endforeach
+										</div>
+										
+									</div>
+
+								  <!-- Controls -->
+								  <a class="left item-control" href="#similar-product" data-slide="prev">
+									<i class="fa fa-angle-left"></i>
+								  </a>
+								  <a class="right item-control" href="#similar-product" data-slide="next">
+									<i class="fa fa-angle-right"></i>
+								  </a>
+							</div>
+							@endif
